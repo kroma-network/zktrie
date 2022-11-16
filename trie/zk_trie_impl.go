@@ -7,7 +7,7 @@ import (
 	"io"
 	"math/big"
 
-	zkt "github.com/scroll-tech/zktrie/types"
+	zkt "github.com/light-scale/zktrie/types"
 )
 
 const (

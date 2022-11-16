@@ -22,8 +22,8 @@ import (
 	"runtime/cgo"
 	"unsafe"
 
-	"github.com/scroll-tech/zktrie/trie"
-	zkt "github.com/scroll-tech/zktrie/types"
+	"github.com/light-scale/zktrie/trie"
+	zkt "github.com/light-scale/zktrie/types"
 )
 
 var zeros = [32]byte{}
