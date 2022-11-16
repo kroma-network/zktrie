@@ -19,7 +19,7 @@ package trie
 import (
 	"math/big"
 
-	zkt "github.com/scroll-tech/zktrie/types"
+	zkt "github.com/wemixkanvas/zktrie/types"
 )
 
 // ZkTrie wraps a trie with key hashing. In a secure trie, all
@@ -50,13 +50,11 @@ const NodeKeyValidBytes = 31
 // underlying diskdb
 func NewZkTrie(root zkt.Byte32, db ZktrieDatabase) (*ZkTrie, error) {
 	maxLevels := NodeKeyValidBytes * 8
-	tree, err := NewZkTrieImplWithRoot((db), zkt.NewHashFromBytes(root.Bytes()), maxLevels)
+	tree, err := NewZkTrieImplWithRoot(db, zkt.NewHashFromBytes(root.Bytes()), maxLevels)
 	if err != nil {
 		return nil, err
 	}
-	return &ZkTrie{
-		tree: tree,
-	}, nil
+	return &ZkTrie{tree: tree}, nil
 }
 
 // TryGet returns the value for key stored in the trie.

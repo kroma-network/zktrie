@@ -1,6 +1,6 @@
 # zktrie
 
-Wrap the zktrie go module in [l2geth](http://github.com/scroll-tech/go-ethereum) for rust
+Wrap the zktrie go module in [l2geth](http://github.com/wemixkanvas/go-ethereum) for rust
 
 ## Usage
 
@@ -11,7 +11,7 @@ We must init the crate with a poseidon hash scheme before any actions:
 extern "C" fn hash_scheme(a: *const u8, b: *const u8, out: *mut u8) -> *const i8 {
     /*
         implement of poseidon hash which accept two 32-bytes buffer `a` and `b` as integer of finite field
-        
+
         and write the output hashed integer to the mutable 32-bytes buffer `out`
 
         for any error, return them via a message with `&'static str`, or return ptr::null for success
@@ -65,7 +65,7 @@ Add `Cargo.toml` under `[dependencies]`:
 
 ```toml
 [dependencies]
-zktrie = { git = "https://https://github.com/scroll-tech/zktrie.git" }
+zktrie = { git = "https://https://github.com/wemixkanvas/zktrie.git" }
 ```
 
 ## License
@@ -76,4 +76,3 @@ Licensed under either of
 - MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
-

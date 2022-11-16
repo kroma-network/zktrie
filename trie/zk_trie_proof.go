@@ -3,7 +3,7 @@ package trie
 import (
 	"bytes"
 
-	zkt "github.com/scroll-tech/zktrie/types"
+	zkt "github.com/wemixkanvas/zktrie/types"
 )
 
 var magicSMTBytes []byte
@@ -29,7 +29,7 @@ func DecodeSMTProof(data []byte) (*Node, error) {
 // but save the node data with a compact form
 func (mt *ZkTrieImpl) prove(kHash *zkt.Hash, fromLevel uint, writeNode func(*Node) error) error {
 
-	path := getPath(mt.maxLevels, kHash[:])
+	path := GetPath(mt.maxLevels, kHash[:])
 	var nodes []*Node
 	tn := mt.rootHash
 	for i := 0; i < mt.maxLevels; i++ {

@@ -5,9 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math/big"
 
-	zkt "github.com/scroll-tech/zktrie/types"
+	zkt "github.com/wemixkanvas/zktrie/types"
 )
 
 const (
@@ -18,7 +17,7 @@ const (
 
 var (
 	// ErrNodeKeyAlreadyExists is used when a node key already exists.
-	ErrInvalidField = errors.New("Key not inside the Finite Field")
+	ErrInvalidField = errors.New("key not inside the Finite Field")
 	// ErrNodeKeyAlreadyExists is used when a node key already exists.
 	ErrNodeKeyAlreadyExists = errors.New("key already exists")
 	// ErrKeyNotFound is used when a key is not found in the ZkTrieImpl.
@@ -101,7 +100,7 @@ func (mt *ZkTrieImpl) TryUpdate(nodeKey *zkt.Hash, vFlag uint32, vPreimage []zkt
 	}
 
 	newLeafNode := NewLeafNode(nodeKey, vFlag, vPreimage)
-	path := getPath(mt.maxLevels, nodeKey[:])
+	path := GetPath(mt.maxLevels, nodeKey[:])
 
 	// precalc NodeHash of new leaf here
 	if _, err := newLeafNode.NodeHash(); err != nil {
@@ -214,7 +213,7 @@ func (mt *ZkTrieImpl) addLeaf(newLeaf *Node, currNodeHash *zkt.Hash,
 			return nil, ErrEntryIndexAlreadyExists
 
 		}
-		pathOldLeaf := getPath(mt.maxLevels, n.NodeKey[:])
+		pathOldLeaf := GetPath(mt.maxLevels, n.NodeKey[:])
 		// We need to push newLeaf down until its path diverges from
 		// n's path
 		return mt.pushLeaf(newLeaf, n, lvl, path, pathOldLeaf)
@@ -292,7 +291,7 @@ func (mt *ZkTrieImpl) updateNode(n *Node) (*zkt.Hash, error) {
 
 func (mt *ZkTrieImpl) tryGet(nodeKey *zkt.Hash) (*Node, []*zkt.Hash, error) {
 
-	path := getPath(mt.maxLevels, nodeKey[:])
+	path := GetPath(mt.maxLevels, nodeKey[:])
 	nextHash := mt.rootHash
 	var siblings []*zkt.Hash
 	for i := 0; i < mt.maxLevels; i++ {
@@ -360,7 +359,7 @@ func (mt *ZkTrieImpl) TryDelete(nodeKey *zkt.Hash) error {
 		return ErrInvalidField
 	}
 
-	path := getPath(mt.maxLevels, nodeKey[:])
+	path := GetPath(mt.maxLevels, nodeKey[:])
 
 	nextHash := mt.rootHash
 	siblings := []*zkt.Hash{}
@@ -510,8 +509,8 @@ func (mt *ZkTrieImpl) GetNode(nodeHash *zkt.Hash) (*Node, error) {
 	return NewNodeFromBytes(nBytes)
 }
 
-// getPath returns the binary path, from the root to the leaf.
-func getPath(numLevels int, k []byte) []bool {
+// GetPath returns the binary path, from the root to the leaf.
+func GetPath(numLevels int, k []byte) []bool {
 	path := make([]bool, numLevels)
 	for n := 0; n < numLevels; n++ {
 		path[n] = zkt.TestBit(k[:], uint(n))
@@ -543,17 +542,18 @@ type Proof struct {
 }
 
 // BuildZkTrieProof prove uniformed way to turn some data collections into Proof struct
-func BuildZkTrieProof(rootHash *zkt.Hash, k *big.Int, lvl int, getNode func(key *zkt.Hash) (*Node, error)) (*Proof,
-	*Node, error) {
+func BuildZkTrieProof(
+	rootHash *zkt.Hash,
+	kHash *zkt.Hash,
+	path []bool,
+	getNode func(key *zkt.Hash) (*Node, error),
+) (*Proof, *Node, error) {
 
 	p := &Proof{}
 	var siblingHash *zkt.Hash
 
-	kHash := zkt.NewHashFromBigInt(k)
-	path := getPath(lvl, kHash[:])
-
 	nextHash := rootHash
-	for p.depth = 0; p.depth < uint(lvl); p.depth++ {
+	for p.depth = 0; p.depth < uint(len(path)); p.depth++ {
 		n, err := getNode(nextHash)
 		if err != nil {
 			return nil, nil, err
@@ -632,7 +632,7 @@ func (proof *Proof) rootFromProof(nodeHash, nodeKey *zkt.Hash) (*zkt.Hash, error
 	var err error
 
 	sibIdx := len(proof.Siblings) - 1
-	path := getPath(int(proof.depth), nodeKey[:])
+	path := GetPath(int(proof.depth), nodeKey[:])
 	var siblingHash *zkt.Hash
 	for lvl := int(proof.depth) - 1; lvl >= 0; lvl-- {
 		if zkt.TestBitBigEndian(proof.notempties[:], uint(lvl)) {
