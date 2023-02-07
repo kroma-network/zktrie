@@ -99,7 +99,7 @@ func (mt *ZkTrieImpl) TryUpdate(kHash *zkt.Hash, vFlag uint32, vPreimage []zkt.B
 	}
 
 	newNodeLeaf := NewNodeLeaf(kHash, vFlag, vPreimage)
-	path := getPath(mt.maxLevels, kHash[:])
+	path := GetPath(mt.maxLevels, kHash[:])
 
 	// precalc Key of new leaf here
 	if _, err := newNodeLeaf.Key(); err != nil {
@@ -133,7 +133,7 @@ func (mt *ZkTrieImpl) tryDeleteLite(kHash *zkt.Hash) error {
 		return ErrInvalidField
 	}
 
-	path := getPath(mt.maxLevels, kHash[:])
+	path := GetPath(mt.maxLevels, kHash[:])
 
 	nextKey := mt.rootKey
 	siblings := []*zkt.Hash{}
@@ -262,7 +262,7 @@ func (mt *ZkTrieImpl) addLeaf(newLeaf *Node, key *zkt.Hash,
 			return nil, ErrEntryIndexAlreadyExists
 
 		}
-		pathOldLeaf := getPath(mt.maxLevels, n.NodeKey[:])
+		pathOldLeaf := GetPath(mt.maxLevels, n.NodeKey[:])
 		// We need to push newLeaf down until its path diverges from
 		// n's path
 		return mt.pushLeaf(newLeaf, n, lvl, path, pathOldLeaf)
@@ -339,7 +339,7 @@ func (mt *ZkTrieImpl) updateNode(n *Node) (*zkt.Hash, error) {
 
 func (mt *ZkTrieImpl) tryGet(kHash *zkt.Hash) (*Node, []*zkt.Hash, error) {
 
-	path := getPath(mt.maxLevels, kHash[:])
+	path := GetPath(mt.maxLevels, kHash[:])
 	nextKey := mt.rootKey
 	var siblings []*zkt.Hash
 	for i := 0; i < mt.maxLevels; i++ {
@@ -407,7 +407,7 @@ func (mt *ZkTrieImpl) TryDelete(kHash *zkt.Hash) error {
 		return ErrInvalidField
 	}
 
-	path := getPath(mt.maxLevels, kHash[:])
+	path := GetPath(mt.maxLevels, kHash[:])
 
 	nextKey := mt.rootKey
 	siblings := []*zkt.Hash{}
@@ -557,8 +557,8 @@ func (mt *ZkTrieImpl) GetNode(key *zkt.Hash) (*Node, error) {
 	return NewNodeFromBytes(nBytes)
 }
 
-// getPath returns the binary path, from the root to the leaf.
-func getPath(numLevels int, k []byte) []bool {
+// GetPath returns the binary path, from the root to the leaf.
+func GetPath(numLevels int, k []byte) []bool {
 	path := make([]bool, numLevels)
 	for n := 0; n < numLevels; n++ {
 		path[n] = zkt.TestBit(k[:], uint(n))
@@ -683,7 +683,7 @@ func (proof *Proof) rootFromProof(key, kHash *zkt.Hash) (*zkt.Hash, error) {
 	var err error
 
 	sibIdx := len(proof.Siblings) - 1
-	path := getPath(int(proof.depth), kHash[:])
+	path := GetPath(int(proof.depth), kHash[:])
 	var siblingKey *zkt.Hash
 	for lvl := int(proof.depth) - 1; lvl >= 0; lvl-- {
 		if zkt.TestBitBigEndian(proof.notempties[:], uint(lvl)) {
