@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io"
-	"math/big"
-
 	zkt "github.com/light-scale/zktrie/types"
+	"io"
 )
 
 const (
@@ -592,17 +590,18 @@ type Proof struct {
 }
 
 // BuildZkTrieProof prove uniformed way to turn some data collections into Proof struct
-func BuildZkTrieProof(rootKey *zkt.Hash, k *big.Int, lvl int, getNode func(key *zkt.Hash) (*Node, error)) (*Proof,
-	*Node, error) {
+func BuildZkTrieProof(
+	rootKey *zkt.Hash,
+	kHash *zkt.Hash,
+	path []bool,
+	getNode func(key *zkt.Hash) (*Node, error),
+) (*Proof, *Node, error) {
 
 	p := &Proof{}
 	var siblingKey *zkt.Hash
 
-	kHash := zkt.NewHashFromBigInt(k)
-	path := getPath(lvl, kHash[:])
-
 	nextKey := rootKey
-	for p.depth = 0; p.depth < uint(lvl); p.depth++ {
+	for p.depth = 0; p.depth < uint(len(path)); p.depth++ {
 		n, err := getNode(nextKey)
 		if err != nil {
 			return nil, nil, err

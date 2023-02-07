@@ -40,14 +40,11 @@ type ZkTrie struct {
 // SecureBinaryTrie bypasses all the buffer mechanism in *Database, it directly uses the
 // underlying diskdb
 func NewZkTrie(root zkt.Byte32, db ZktrieDatabase) (*ZkTrie, error) {
-
-	tree, err := NewZkTrieImplWithRoot((db), zkt.NewHashFromBytes(root.Bytes()), 256)
+	tree, err := NewZkTrieImplWithRoot(db, zkt.NewHashFromBytes(root.Bytes()), 256)
 	if err != nil {
 		return nil, err
 	}
-	return &ZkTrie{
-		tree: tree,
-	}, nil
+	return &ZkTrie{tree: tree}, nil
 }
 
 // TryGet returns the value for key stored in the trie.
