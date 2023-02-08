@@ -141,7 +141,8 @@ func (t *ZkTrie) Prove(key []byte, fromLevel uint, writeNode func(*Node) error) 
 	if err != nil {
 		return err
 	}
-	err = t.tree.prove(k, fromLevel, func(n *Node) error {
+	path := GetPath(t.tree.maxLevels, k[:])
+	err = t.tree.prove(path, fromLevel, func(n *Node) error {
 		if n.Type == NodeTypeLeaf {
 			n.KeyPreimage = zkt.NewByte32FromBytesPaddingZero(key)
 		}
@@ -151,6 +152,18 @@ func (t *ZkTrie) Prove(key []byte, fromLevel uint, writeNode func(*Node) error) 
 		return err
 	}
 
+	// we put this special kv pair in db so we can distinguish the type and
+	// make suitable Proof
+	return nil
+}
+
+func (t *ZkTrie) ProveByPath(path []bool, fromLevel uint, writeNode func(*Node) error) error {
+	// notice Prove in secure trie "pass through" the key instead of secure it
+	// this keep consistent behavior with geth's secure trie
+	err := t.tree.prove(path, fromLevel, writeNode)
+	if err != nil {
+		return err
+	}
 	// we put this special kv pair in db so we can distinguish the type and
 	// make suitable Proof
 	return nil

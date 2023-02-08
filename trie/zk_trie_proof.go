@@ -2,8 +2,6 @@ package trie
 
 import (
 	"bytes"
-
-	zkt "github.com/light-scale/zktrie/types"
 )
 
 var magicSMTBytes []byte
@@ -27,9 +25,7 @@ func DecodeSMTProof(data []byte) (*Node, error) {
 
 // Prove constructs a merkle proof for SMT, it respect the protocol used by the ethereum-trie
 // but save the node data with a compact form
-func (mt *ZkTrieImpl) prove(kHash *zkt.Hash, fromLevel uint, writeNode func(*Node) error) error {
-
-	path := GetPath(mt.maxLevels, kHash[:])
+func (mt *ZkTrieImpl) prove(path []bool, fromLevel uint, writeNode func(*Node) error) error {
 	var nodes []*Node
 	tn := mt.rootKey
 	for i := 0; i < mt.maxLevels; i++ {
