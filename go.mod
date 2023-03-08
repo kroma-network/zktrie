@@ -1,3 +1,3 @@
-module github.com/light-scale/zktrie
+module github.com/wemixkanvas/zktrie
 
 go 1.18

@@ -3,7 +3,7 @@ package trie
 import (
 	"bytes"
 
-	zkt "github.com/light-scale/zktrie/types"
+	zkt "github.com/wemixkanvas/zktrie/types"
 )
 
 var magicSMTBytes []byte
