@@ -22,8 +22,8 @@ import (
 	"runtime/cgo"
 	"unsafe"
 
-	"github.com/wemixkanvas/zktrie/trie"
-	zkt "github.com/wemixkanvas/zktrie/types"
+	"github.com/kroma-network/zktrie/trie"
+	zkt "github.com/kroma-network/zktrie/types"
 )
 
 var zeros = [32]byte{}

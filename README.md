@@ -1,6 +1,6 @@
 # zktrie
 
-Wrap the zktrie go module in [l2geth](http://github.com/wemixkanvas/go-ethereum) for rust
+Wrap the zktrie go module in [l2geth](http://github.com/kroma-network/go-ethereum) for rust
 
 ## Usage
 
@@ -65,7 +65,7 @@ Add `Cargo.toml` under `[dependencies]`:
 
 ```toml
 [dependencies]
-zktrie = { git = "https://https://github.com/wemixkanvas/zktrie.git" }
+zktrie = { git = "https://https://github.com/kroma-network/zktrie.git" }
 ```
 
 ## License
