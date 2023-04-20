@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	zkt "github.com/wemixkanvas/zktrie/types"
+	zkt "github.com/kroma-network/zktrie/types"
 )
 
 // NodeType defines the type of node in the MT.

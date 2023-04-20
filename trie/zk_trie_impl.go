@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	zkt "github.com/wemixkanvas/zktrie/types"
+	zkt "github.com/kroma-network/zktrie/types"
 )
 
 const (

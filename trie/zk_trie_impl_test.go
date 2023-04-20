@@ -4,8 +4,8 @@ import (
 	"math/big"
 	"testing"
 
+	zkt "github.com/kroma-network/zktrie/types"
 	"github.com/stretchr/testify/assert"
-	zkt "github.com/wemixkanvas/zktrie/types"
 )
 
 var lcEff *big.Int

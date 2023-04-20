@@ -1,4 +1,4 @@
-module github.com/wemixkanvas/zktrie
+module github.com/kroma-network/zktrie
 
 go 1.18
 
