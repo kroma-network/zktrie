@@ -17,7 +17,7 @@ gobuild = "0.1.0-alpha.1"
 [dev-dependencies]
 hex = "0.4"
 halo2_proofs = { git = "https://github.com/kroma-network/halo2.git", branch = "halo2-with-tachyon" }
-poseidon-circuit = { git = "https://github.com/kroma-network/poseidon-circuit.git", rev = "0799a4a" }
+poseidon-circuit = { git = "https://github.com/kroma-network/poseidon-circuit.git", rev = "3d46015" }
 
 [features]
 dual_codehash = []
